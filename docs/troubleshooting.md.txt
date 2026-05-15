@@ -1,0 +1,44 @@
+# Troubleshooting Report - TechCorp Network
+
+## Issue 1: Interface Down on R1 GigabitEthernet0/0
+
+Problem:
+Interface remained in down/down state.
+
+Cause:
+No active physical connection to ISP router.
+
+Fix:
+Connected correct router-to-router link and ensured both interfaces were configured and enabled.
+
+---
+
+## Issue 2: OSPF Default Route Missing
+
+Problem:
+R2 did not show a gateway of last resort.
+
+Cause:
+Default route not properly injected into OSPF from R1.
+
+Fix:
+Configured static default route on R1 and enabled default-information originate under OSPF process.
+
+---
+
+## Issue 3: ACL Duplication and Configuration Conflict
+
+Problem:
+Two different ACLs were created for Guest VLAN filtering.
+
+Cause:
+Repeated configuration attempts created inconsistent ACL naming and rules.
+
+Fix:
+Removed duplicate ACLs and standardized on a single ACL applied to VLAN 40 interface.
+
+---
+
+## Outcome
+
+All routing, VLAN segmentation, ACL security, and WAN connectivity issues were resolved. The network is now fully operational with end-to-end communication and controlled external access.

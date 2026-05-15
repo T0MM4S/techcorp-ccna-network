@@ -1,0 +1,74 @@
+# Network Design - TechCorp
+
+## Topology Overview
+The network consists of two routers (R1 and R2), two switches (SW1 and SW2), and one ISP router. The design follows a hierarchical model separating access, distribution, and edge functions.
+
+- SW1 and SW2 provide Layer 2 switching and VLAN segmentation
+- R2 performs inter-VLAN routing using router-on-a-stick
+- R1 acts as the edge router handling NAT and ISP connectivity
+- ISP router simulates external Internet access
+
+---
+
+## IP Addressing Scheme
+
+### Internal Networks
+
+- VLAN 10 (HR): 192.168.10.0/24
+- VLAN 20 (IT): 192.168.20.0/24
+- VLAN 30 (Sales): 192.168.30.0/24
+- VLAN 40 (Guest): 192.168.40.0/24
+- VLAN 99 (Management): 192.168.99.0/24
+
+### Inter-Router Links
+
+- R1–R2: 10.0.0.0/30
+- R1–ISP: 203.0.113.0/30
+
+---
+
+## Routing Design
+
+- OSPF is used between R1 and R2
+- All VLAN networks are advertised through OSPF
+- R1 injects a default route into OSPF
+- R2 receives the default route for external traffic forwarding
+
+---
+
+## VLAN and Trunking Design
+
+- Router-on-a-stick is implemented on R2
+- Subinterfaces are used for VLAN tagging:
+  - Gig0/1.10, .20, .30, .40, .99
+- Trunk links connect SW1 and SW2 to R2
+
+---
+
+## NAT Design
+
+- NAT overload (PAT) is configured on R1
+- Internal private IP addresses are translated to a single public IP
+- This allows all VLANs to access external networks through ISP
+
+---
+
+## Security Design
+
+### ACL Policy
+- Guest VLAN is restricted from accessing internal VLANs
+- Only external access is permitted for Guest users
+
+### Device Security
+- SSH enabled on all network devices
+- Telnet disabled
+- Local authentication used for secure login
+
+---
+
+## Key Design Decisions
+
+- /30 subnet used for point-to-point links to conserve IP addresses
+- VLAN 99 used for management instead of VLAN 1 for security reasons
+- Router-on-a-stick used instead of multiple physical router interfaces
+- OSPF chosen for dynamic routing scalability
